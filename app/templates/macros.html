@@ -1,0 +1,79 @@
+{% macro text_input(name, value) %}
+<div class="text_input_wrapper">
+  <input type="text" class="text_input" name="{{ name }}" value="{{ value }}">
+</div>
+{% endmacro %}
+
+{% macro command_box(routes, query) %}
+<form id="command_box" action="{{ routes.HOME }}">
+  <div class="command_box">
+    <div class="command_box_input">
+      <div class="command_box_text_input_wrapper">
+        <input type="text" class="text_input" name="q" value="{{ query }}">
+      </div>
+    </div>
+    <div class="command_box_button" onclick="submit('command_box')">
+      Go
+    </div>
+  </div>
+</form>
+{% endmacro %}
+
+{% macro command_view(routes, command, checked, signed_in, checkbox_prefix, last_command, default_command, builtin_commands, csrf_token) %}
+<tr>
+  {% if checkbox_prefix is defined %}
+  <td>
+    <input type="checkbox" name="{{checkbox_prefix}}{{ command.name }}" value="true" {% if checked %}checked="true"{% endif %}>
+  </td>
+  {% endif %}
+  <td class="command_label {% if builtin_commands %} builtin_command_label {% endif %}">
+    <strong>{{ command.name }}</strong>
+  </td>
+  <td class="last_column{% if not last_command %} command_detail{% endif %}">
+    <span>
+      {{ command.description if command.description != None else 'No
+      description' }}
+      <a id="{{ command.name }}_expand" onclick="hide('{{ command.name }}_expand'); show('{{ command.name }}_detail')">
+        &#8230;
+      </a>
+    </span>
+    <div id="{{ command.name }}_detail" hidden="true">
+      <span class="extra_content" >
+        URL pattern: <code>{{ command.url_pattern }}</code>
+      </span>
+      {% if command.default_url != None %}
+        <span class="extra_content">
+          Default URL: <code>{{ command.default_url }}</code>
+        </span>
+      {% endif %}
+      {% if signed_in and (checkbox_prefix is not defined) %}
+        <div class="nav nav_up">
+          {% if default_command != command.name %}
+            <form id="{{ command.name }}_default" action="{{ routes.SET_DEFAULT_COMMAND }}" method="POST">
+              {{ csrf(csrf_token) }}
+              <input type="hidden" name="default_command" value="{{ command.name }}">
+            </form>
+            <a onclick="submit('{{ command.name }}_default', 'Click OK to set {{ command.name }} as your default command.')" class="nav" >
+              Make Default
+            </a>
+          {% endif %}
+          <a href="{{ routes.EDIT_COMMAND_ONLY + command.name }}" class="nav">
+            Edit
+          </a>
+          <form id="{{ command.name }}_delete" action="{{ routes.DELETE_COMMAND }}" method="POST">
+            {{ csrf(csrf_token) }}
+            <input type="hidden" name="delete" value="{{ command.name }}">
+          </form>
+          <a onclick="submit('{{ command.name }}_delete', 'Click OK to delete {{ command.name }} command.')">
+            Delete
+          </a>
+        </div>
+      {% endif %}
+    </div>
+  </td>
+</tr>
+{% endmacro %}
+
+{% macro csrf(csrf_token) %}
+<input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+{% endmacro %}

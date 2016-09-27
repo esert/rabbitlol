@@ -1,0 +1,86 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="subheader">
+  <h2>
+    How do I add rabbitlol as a search engine to Chrome?
+  </h2>
+</div>
+<div class="subcontent">
+  <span>
+    Chrome adds rabbitlol as a search engine when you visit
+    www.rabbitlol.com. You can verify it by going
+    to <strong>Settings</strong> >
+    <strong>Manage search engines</strong> (under
+    <strong>Search</strong> title) and then searching for rabbitlol
+    under <strong>Other search engines</strong>.
+  </span>
+</div>
+<div class="subcontent">
+  <span>
+    If you don't see rabbitlol command in Chrome at the described
+    location, you can add it manually. At the very end
+    of <strong>Other search engines</strong> list, you will see a data
+    entry row. Set the name to <strong>rabbitlol</strong>, keyword
+    to <strong>rabbitlol.com</strong> and URL to
+  </span>
+  <span class="extra_content">
+    <pre>https://www.rabbitlol.com/?q=%s</pre>
+  </span>
+</div>
+<div class="subcontent">
+  <span>
+    You can run rabbitlol commands by
+    typing <strong>rabbitlol.com</strong> to omnibox then hitting Tab
+    button.
+  </span>
+</div>
+<div class="subheader">
+  <h2>
+    How do I make rabbitlol the default search engine in Chrome?
+  </h2>
+</div>
+<div class="subcontent">
+  <span>
+    Go to <strong>Settings</strong> >
+    <strong>Manage search engines</strong> and find rabbitlol
+    under <strong>Other search engines</strong>. Hover your mouse over
+    rabbitlol and you should see <strong>Make default</strong> appear
+    at the right end of the row. Clicking it will make rabbitlol your
+    default search engine, so you can query rabbitlol from your
+    omnibox with no extra effort.
+  </span>
+</div>
+<div class="subheader">
+  <h2>
+    How do I set a default command?
+  </h2>
+</div>
+<div class="subcontent">
+  <span>
+    <strong>If you are signed in</strong>, visit <a href="{{
+    routes.COMMANDS }}">commands</a> page and set one of your commands
+    as the default command.
+  </span>
+</div>
+<div class="subcontent">
+  <span>
+    <strong>If you are not signed in</strong>, you need to tell
+    rabbitlol which command to use as default command everytime you
+    make a query. To do that, you need to modify the search URL. Go
+    to <strong>Settings</strong> >
+    <strong>Manage search engines</strong>, find rabbitlol and
+    add <strong>&default=&lt;your_defualt_command_name&gt;</strong> at
+    the end of the query URL. For example, if you want to
+    use <strong>g</strong> as your default command, convert
+  </span>
+  <span class="extra_content">
+    <pre>https://www.rabbitlol.com/?q=%s</pre>
+  </span>
+  <span class="extra_content">
+    to
+  </span>
+  <span class="extra_content">
+    <pre>https://www.rabbitlol.com/?q=%s&default=g</pre>
+  </span>
+</div>
+{% endblock %}

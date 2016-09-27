@@ -1,0 +1,134 @@
+{% extends "layout.html" %}
+{% import "macros.html" as macros %}
+{% block content %}
+<div class="subheader">
+  <h2>
+    {% if original_command is defined %}
+      Edit command
+    {% else %}
+      Create a new command
+    {% endif %}
+  </h2>
+</div>
+{% if error %}
+<div class="subheader">
+  <h3>
+    {{ error }}
+  </h3>
+</div>
+{% endif %}
+<div class="subcontent">
+  <form id="form" action="{{ action }}" method="POST">
+    {{ macros.csrf(csrf_token) }}
+    <table>
+      <tr>
+        <td class="input_label">
+          <strong>Name</strong>
+        <td>
+        <td class="input_column">
+          <span>
+            {{ macros.text_input('name', name if name != None) }}
+          </span>
+          <span class="extra_content">
+            You invoke the command with this name. It must consist of
+            one or more letters, numbers or a subset of the
+            punctuation characters
+            (<code>-</code>, <code>_</code>, <code>!</code>, <code>@</code>,
+            <code>#</code>, <code>$</code>, <code>%</code>). It must
+            also be unique among all the commands you have.
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td class="input_label">
+          <strong>Description</strong>
+        <td>
+        <td class="input_column">
+          <span>
+            {{ macros.text_input('description', description if
+            description != None) }}
+          </span>
+          <span class="extra_content">
+            Describe what the command does. This field is optional.
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td class="input_label">
+          <strong>URL pattern</strong>
+        <td>
+        <td class="input_column">
+          <span>
+            {{ macros.text_input('url_pattern', url_pattern if
+            url_pattern != None) }}
+          </span>
+          <span class="extra_content">
+            This is where the command redirects you. If you want to
+            go to a different URL depending on the arguments you used
+            with the command, you can use placeholders
+            <code>{0}</code>, <code>{1}</code>, <code>{2}</code>
+            &#8230; <a id="learn"
+            onclick="hide('learn');show('detail')">Learn more</a>
+          </span>
+          <div id="detail" hidden="true">
+            <span class="extra_content">
+              <code>{0}</code> is replaced with all the arguments
+              (multiple spaces between the arguments are collapsed to
+              a single space), <code>{1}</code> is replaced with the
+              first argument, <code>{2}</code> is replaced with the
+              second argument, and so on. All arguments will be
+              percent encoded by default.
+            </span>
+            <span class="extra_content">
+              Example: If the command name is <code>foo</code> and URL
+              pattern is
+              <code>https://www.example.com/{1}/{2}/?q={0}</code>,
+              running <code>foo bar baz</code> will take you to
+              <code>https://www.example.com/bar/baz/?q=bar%20baz</code>
+            </span>
+            <span class="extra_content">
+              There are also some modifiers you can apply to the
+              arguments using
+              the <code>{arg_num|func1|func2|func3|...}</code>
+              syntax. These modifiers are:
+            </span>
+            {% for modifier in modifiers %}
+              <span class="extra_content">
+                <code>{{ modifier.name }}</code>: {{ modifier.description }}
+              </span>
+            {% endfor %}
+            <span class="extra_content">
+              Example: <code>{1|percent_decode|upper|percent_encode_slash}</code>
+              will (1) percent decode the first argument (which is
+              percent encoded by default), (2) convert the resulting
+              string to upper case, (3) percent encode the resulting
+              string, except for the slash characters.
+            </span>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td class="input_label">
+          <strong>Default URL</strong>
+        <td>
+        <td>
+          <span>
+            {{ macros.text_input('default_url', default_url if
+            default_url != None) }}
+          </span>
+          <span class="extra_content">
+            This is where the command redirects you if you don't
+            provide any arguments. This field is optional.
+          </span>
+        </td>
+      </tr>
+    </table>
+  </form>
+</div>
+<div class="subcontent nav">
+  <a href="#" onclick="submit('form')" class="nav">
+    Save
+  </a>
+  <a href="{{ routes.COMMANDS }}">Cancel</a>
+</div>
+{% endblock %}

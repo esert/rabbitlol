@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="subheader">
+  <h2>
+    Sign in with&#8230;
+  </h2>
+</div>
+<div class="subheader">
+  {% for service in services %}
+    <form id="{{ service }}" action="{{ routes.OAUTH_INITIATE_ONLY + (service|lower) }}">
+      <div class="sign_in_button{% if loop.last %} sign_in_button_bottom{% endif %}" onclick="submit('{{ service }}')">
+        {{ service }}
+      </div>
+    </form>
+  {% endfor %}
+</div>
+{% endblock %}

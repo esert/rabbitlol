@@ -1,0 +1,101 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="subheader">
+  <img width="200px" src="{{ url_for('static', filename='rabbitlol.png') }}">
+</div>
+<div class="subcontent">
+  <span>
+    rabbitlol makes you more productive by helping you navigate the
+    web faster. It lets you run custom commands, so you can search
+    Youtube, query WolframAlpha, look up C++ functions (and more) with
+    a couple keystrokes.
+  </span>
+</div>
+<div class="subcontent">
+  <span>
+    Try running some sample commands by clicking "Go" below.
+  </span>
+</div>
+<div class="subcontent">
+  <div class="attention">
+    <form id="command_box" action="{{ routes.HOME }}" target="_blank">
+      <div class="command_box">
+        <div class="command_box_input">
+          <div class="command_box_text_input_wrapper">
+            <input id="query" type="text" class="text_input" name="q" value="{{ query }}">
+          </div>
+        </div>
+        <div class="command_box_button" onclick="submit_and_update('command_box')">
+          Go
+        </div>
+      </div>
+    </form>
+    <span id="comment" class="extra_content"></span>
+  </div>
+</div>
+<div class="subcontent">
+  <span>
+    Once rabbitlol recieves the query over a secure connection, it
+    interprets the command (first word of the query), applies the
+    arguments (rest of the query) and redirects you according to the
+    command invoked.
+  </span>
+</div>
+<div class="subcontent">
+  <span>
+    A set of <a href="{{ routes.COMMANDS }}">builtin commands</a> are
+    available for everyone to run. You can also create and run your
+    own custom commands by <a href="{{ routes.SIGN_IN }}">signing
+    in</a> with your Facebook, Github, Google or Twitter account.
+  </span>
+</div>
+<div class="subcontent">
+  <span>
+    To get the most out of rabbitlol, consider making it your
+    browser's search engine, as explained in the <a href="{{
+    routes.SETUP_ONLY }}">setup</a> page. This will let you run
+    commands with little friction and any query rabbitlol doesn't
+    understand can be forwarded to your original search engine (also
+    explained in the setup page).
+  </span>
+</div>
+<div class="subcontent">
+  <span>
+    rabbitlol is inspired
+    by <a href="https://www.quora.com/What-is-Facebooks-bunnylol"
+    target="_blank">bunnylol</a>, a tool used within Facebook for
+    similar purposes. You can find rabbitlol's source code
+    at <a href="https://www.github.com/esert/rabbitlol">GitHub</a>. Send
+    your comments to <a href="mailto:contact@rabbitlol.com"
+    target="_blank">contact@rabbitlol.com</a>.
+  </span>
+</div>
+<div class="subcontent">
+  <span>
+  </span>
+</div>
+<script>
+  current_query_index = 0;
+  sample_queries = [
+  {% for sample_query in sample_queries %}
+    {
+      'query': "{{ sample_query.query }}",
+      'comment': "{{ sample_query.comment }}",
+    }{% if not loop.last %},{% endif %}
+    {% endfor %}
+  ];
+  update = function() {
+    var current_query = sample_queries[current_query_index];
+    current_query_index = (current_query_index + 1) % sample_queries.length;
+    var query = document.getElementById('query');
+    var comment = document.getElementById('comment');
+    query.value = current_query.query;
+    comment.innerHTML = current_query.comment;
+  };
+  submit_and_update = function(id) {
+    submit(id);
+    update();
+  };
+  update();
+</script>
+{% endblock %}

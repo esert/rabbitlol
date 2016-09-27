@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+{% import "macros.html" as macros %}
+{% block content %}
+<div class="subcontent">
+  <span>
+    These are your commands. You can have {{ command_limit }} of
+    them. You can see the URL pattern and default URL (if exists) of
+    any command by clicking on the ellipsis at the end of its
+    description. This will also reveal <strong>Make
+    Default</strong>, <strong>Edit</strong>
+    and <strong>Delete</strong> buttons for the command.
+  </span>
+</div>
+<div class="subcontent">
+  <span>
+    {% if default_command != None %}
+      <form id="{{ default_command }}_remove_default" action="{{
+      routes.SET_DEFAULT_COMMAND }}" method="POST">
+        {{ macros.csrf(csrf_token) }}
+      </form>
+      Your default command is <strong>{{ default_command }}</strong>.
+      <a onclick="submit('{{ default_command }}_remove_default',
+      'Click OK to remove your default command.')">Remove default
+      command</a>
+    {% else %}
+      You don't have a default command. Click <strong>Make
+      Default</strong> on one of the commands to set one.
+    {% endif %}
+  </span>
+</div>
+<div class="subcontent">
+  <span>
+    Click new command to create a new command. You can also copy
+    from <a href="{{ routes.PICK_COMMANDS }}">builtin commands</a>.
+  </span>
+</div>
+<div class="subcontent">
+  <a href="{{ routes.NEW_COMMAND_ONLY }}" class="nav">
+    New command
+  </a>
+</div>
+<div class="subcontent">
+  <table>
+    <tbody>
+      {% for command in commands %}
+        {{ macros.command_view(routes, command, signed_in=signed_in,
+        last_command=loop.last, default_command=default_command,
+        csrf_token=csrf_token) }}
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% if commands|length != 0 %}
+<div class="subcontent">
+  <a href="{{ routes.NEW_COMMAND_ONLY }}">
+    New command
+  </a>
+</div>
+{% endif %}
+{% endblock %}

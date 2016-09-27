@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+{% import "macros.html" as macros %}
+{% block content %}
+<div class="subcontent">
+  <span>
+    These are rabbitlol's built-in commands. You can view the details
+    of the commands (e.g. where they take you) by clicking on the
+    ellipses at the end of their descriptions.
+  </span>
+  <span class="extra_content">
+    You can create your own commands by <a href="{{ routes.SIGN_IN
+    }}">signing in</a>.
+  </span>
+</div>
+{% for command_group in builtin_command_groups %}
+  <div class="subheader">
+    <h2>
+      {{ command_group.name }}
+    </h2>
+  </div>
+  <div class="subcontent">
+    <table>
+      <tbody>
+        {% for command in command_group.commands %}
+          {{ macros.command_view(routes, command,
+          builtin_commands=True, last_command=loop.last,
+          csrf_token=csrf_token) }}
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endfor %}
+{% endblock %}

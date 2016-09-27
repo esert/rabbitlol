@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="subcontent">
+  <span>
+    Sorry, we don't know how to support your browser. Desktop versions
+    of <a href="{{ routes.SETUP_ONLY + 'chrome' }}">Chrome</a>
+    and <a href="{{ routes.SETUP_ONLY + 'firefox' }}">Firefox</a> are
+    the only browsers that easily lets you change the search engine
+    integrated to the browser.
+  </span>
+</div>
+<div class="subcontent">
+  <span>
+    You can bookmark and use <a href="{{ routes.RUN }}">this page</a>
+    to run your queries.
+  </span>
+</div>
+{% endblock %}

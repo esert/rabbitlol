@@ -1,0 +1,10 @@
+*.pyc
+.Python
+.coverage
+bin/
+cover/
+include/
+lib/
+man/
+pip-selfcheck.json
+secrets.py

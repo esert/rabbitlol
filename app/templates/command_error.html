@@ -1,0 +1,98 @@
+{% extends "layout.html" %}
+{% import "macros.html" as macros %}
+{% block content %}
+<div class="subheader">
+  <h2>
+    {% if exception_type == 'NotEnoughArgumentsException' %}
+      Not enough arguments
+    {% elif exception_type == 'UnknownCommandException' %}
+      Unknown command: {{ exception.command }}
+    {% elif exception_type == 'UnknownDefaultCommandException' %}
+      Unknown default command: {{ exception.defaultCommand }}
+    {% endif %}
+  </h2>
+</div>
+{% if exception_type == 'NotEnoughArgumentsException' %}
+  <div class="subcontent">
+    <span>
+      <strong>{{ exception.command }}</strong> command requires at
+      least <strong>{{ exception.argCount }}</strong> argument{% if
+      exception.argCount > 1 %}s{% endif %}. If this was a typo, you
+      can fix the query below:
+    </span>
+  </div>
+  <div class="subcontent">
+    <div class="attention">
+      {{ macros.command_box(routes, exception.query) }}
+    </div>
+  </div>
+  {% if signed_in %}
+    <div class="subcontent">
+      <span>
+        You can <a href="{{ routes.EDIT_COMMAND_ONLY +
+        exception.command }}">change</a> the number of required
+        arguments by modifying the URL pattern.
+      </span>
+    </div>
+  {% endif %}
+{% elif exception_type == 'UnknownCommandException' %}
+  <div class="subcontent">
+    <span>
+      You don't have any commands assigned
+      to <strong>{{exception.command}}</strong>. If this was a typo,
+      you can fix the query below:
+    </span>
+  </div>
+  <div class="subcontent">
+    <div class="attention">
+      {{ macros.command_box(routes, exception.query) }}
+    </div>
+  </div>
+  <div class="subcontent">
+    <span>
+      You can designate one of
+      {% if signed_in %}
+      your commands as the <strong>default command</strong>
+      in <a href="{{ routes.COMMANDS }}">commands</a>
+      {% else %}
+      the commands as the <strong>default command</strong>, as
+      explained in <a href="{{ routes.Setup }}">setup</a>
+      {% endif %} page, so
+      any query trying to invoke an unknown command would be arguments
+      to your default command. Having a search engine as your default
+      command is very useful.
+    </span>
+  </div>
+  <div class="subcontent">
+    <span>
+      You can also
+      {% if signed_in %}
+      <a href="{{ routes.NEW_COMMAND_ONLY + exception.command }}">
+      create</a> {{ exception.command }} command.
+      {% else %}
+      <a href="{{ routes.SIGN_IN }}"> sign in </a> to create
+      {{exception.command }} command.
+      {% endif %}
+    </span>
+  </div>
+{% elif exception_type == 'UnknownDefaultCommandException' %}
+  <div class="subcontent">
+    <span>
+      Your query doesn't invoke any known command and your default
+      command <strong>{{ exception.defaultCommand }}</strong> it
+      doesn't exist. If this was a typo, you can fix the query below:
+    </span>
+  </div>
+  <div class="subcontent">
+    <div class="attention">
+      {{ macros.command_box(routes, exception.query) }}
+    </div>
+  </div>
+  <div class="subcontent">
+    <span>
+      Visit <a href="{{ routes.COMMANDS }}">commands</a> page to find
+      a command you can use as your default command.
+    </span>
+  </div>
+{% endif %}
+{% endblock %}

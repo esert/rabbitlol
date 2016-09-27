@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% import "macros.html" as macros %}
+{% block content %}
+<div class="subcontent">
+  <span>
+    Enter your query below.
+  </span>
+</div>
+<div class="subcontent">
+  <div class="attention">
+    {{ macros.command_box(routes, '') }}
+  </div>
+</div>
+{% endblock %}

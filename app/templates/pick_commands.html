@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+{% import "macros.html" as macros %}
+{% block content %}
+{% if error %}
+<div class="subheader">
+  <h3>
+    {{ error }}
+  </h3>
+</div>
+{% endif %}
+<div class="subcontent">
+  Pick some commands to kickstart your collection.
+</div>
+<div class="subcontent">
+  <a onclick="select_all()" class="nav">Select all</a>
+  <a onclick="select_none()" class="nav">Select none</a>
+  <a onclick="submit('form')" class="nav">Save</a>
+  <a href="{{ routes.COMMANDS }}">Skip</a>
+</div>
+<form id="form" action="{{ routes.PICK_COMMANDS }}" method="POST">
+  {{ macros.csrf(csrf_token) }}
+  {% for command_group in builtin_command_groups %}
+    <div class="subheader">
+      <h2>
+        {{ command_group.name }}
+      </h2>
+    </div>
+    <div class="subcontent">
+      <table>
+        <tbody>
+          {% for command in command_group.commands %}
+            {{ macros.command_view(routes, command,
+            checked=checked.get(command.name),
+            checkbox_prefix=checkbox_prefix, builtin_commands=True,
+            last_command=loop.last, csrf_token=csrf_token) }}
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% endfor %}
+</form>
+<div class="subcontent">
+  <a onclick="select_all()" class="nav">Select all</a>
+  <a onclick="select_none()" class="nav">Select none</a>
+  <a onclick="submit('form')" class="nav">Save</a>
+  <a href="{{ routes.COMMANDS }}">Skip</a>
+</div>
+{% endblock %}

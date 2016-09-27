@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>rabbitlol</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='reset.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <script type="text/javascript" src="{{ url_for('static', filename='helpers.js') }}"></script>
+    {% if host == 'http://localhost:8080/' %}
+    <link rel="search" type="application/opensearchdescription+xml" title="rabbitlol" href="{{ url_for('static', filename='opensearch_dev.xml') }}" />
+    {% else %}
+    <link rel="search" type="application/opensearchdescription+xml" title="rabbitlol" href="{{ url_for('static', filename='opensearch.xml') }}" />
+    {% endif %}
+  </head>
+  <body>
+    <div class="header">
+      <div>
+        <h1>
+          <a href="{{ routes.HOME }}" class="h1">
+            rabbitlol
+          </a>
+        </h1>
+      </div>
+      <div class="nav nav_up">
+        <div>
+          <a href="{{ routes.SETUP_ONLY }}" class="nav">
+            Setup
+          </a>
+        </div>
+        <div>
+          <a href="{{ routes.COMMANDS }}" class="nav">
+            Commands
+          </a>
+        </div>
+        <div>
+          {% if signed_in %}
+            <a href="{{ routes.SIGN_OUT }}">
+              Sign Out
+            </a>
+          {% else %}
+            <a href="{{ routes.SIGN_IN }}">
+              Sign In
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    <div class="content">
+      {% block content %}{% endblock %}
+    </div>
+  </body>
+</html>
