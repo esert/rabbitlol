@@ -63,6 +63,19 @@ def test_command():
     assert c.getRedirectUrl(['abc', 'a', 'b', 'c']) == 'pattern-abcca'
     assert c.getRedirectUrl(['abcd', 'a', 'b', 'c', 'd']) == 'pattern-abcdca'
 
+    c = get_dummy_command(url_pattern='pattern-{2:}', default_url=None)
+    with pytest.raises(IndexError):
+        c.getRedirectUrl(['ab', 'a'])
+    assert c.getRedirectUrl(['ab', 'a', 'b']) == 'pattern-b'
+    assert c.getRedirectUrl(['ab', 'a', 'b', 'c', 'd']) == 'pattern-b%20c%20d'
+
+    c = get_dummy_command(url_pattern='pattern-{2:3}', default_url=None)
+    with pytest.raises(IndexError):
+        c.getRedirectUrl(['ab', 'a'])
+    with pytest.raises(IndexError):
+        c.getRedirectUrl(['ab', 'a', 'b'])
+    assert c.getRedirectUrl(['ab', 'a', 'b', 'c', 'd']) == 'pattern-b%20c'
+
     a = get_dummy_command()
     b = Command(**a.toDict())
     assert not (a < b) and not (b < a)

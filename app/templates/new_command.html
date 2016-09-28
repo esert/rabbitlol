@@ -63,10 +63,10 @@
             url_pattern != None) }}
           </span>
           <span class="extra_content">
-            This is where the command redirects you. If you want to
-            go to a different URL depending on the arguments you used
+            This is where the command redirects you. If you want to go
+            to a different URL depending on the arguments you used
             with the command, you can use placeholders
-            <code>{0}</code>, <code>{1}</code>, <code>{2}</code>
+            <code>{0}</code>, <code>{1}</code>, <code>{2:}</code>, <code>{2:4}</code>
             &#8230; <a id="learn"
             onclick="hide('learn');show('detail')">Learn more</a>
           </span>
@@ -75,16 +75,18 @@
               <code>{0}</code> is replaced with all the arguments
               (multiple spaces between the arguments are collapsed to
               a single space), <code>{1}</code> is replaced with the
-              first argument, <code>{2}</code> is replaced with the
-              second argument, and so on. All arguments will be
-              percent encoded by default.
+              first argument, and so on. <code>{2:}</code> is replaced
+              with replaced with all the arguments except the first
+              one, while <code>{2:4}</code> is replaced with argument
+              2, 3 and 4. All arguments will be percent encoded by
+              default.
             </span>
             <span class="extra_content">
               Example: If the command name is <code>foo</code> and URL
               pattern is
-              <code>https://www.example.com/{1}/{2}/?q={0}</code>,
-              running <code>foo bar baz</code> will take you to
-              <code>https://www.example.com/bar/baz/?q=bar%20baz</code>
+              <code>https://www.example.com/{1:2}/{3}/?q={0}</code>,
+              running <code>foo bar baz qux</code> will take you to
+              <code>https://www.example.com/bar%20baz/qux/?q=bar%20baz%20qux</code>
             </span>
             <span class="extra_content">
               There are also some modifiers you can apply to the

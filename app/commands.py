@@ -17,7 +17,7 @@ from app.validators import (
 )
 
 
-arg_regex = re.compile('{(\d+)([^{}]*)}')
+arg_regex = re.compile('{(\d+)(:)?(\d+)?([^:{}]*)}')
 
 
 class Command(object):
@@ -68,8 +68,25 @@ class Command(object):
         parts = []
         last_end = 0
         for match in arg_regex.finditer(self.url_pattern):
-            index_str, all_modifiers = match.groups()
-            arg = percent_encode.run(args[int(index_str)])
+            first_index_str, colon, second_index_str, all_modifiers = match.groups()
+            first_index = int(first_index_str)
+            arg = None
+            if colon:
+                if first_index >= len(args):
+                    raise IndexError()
+                if second_index_str:
+                    second_index = int(second_index_str) + 1
+                    if second_index > len(args):
+                        raise IndexError()
+                    arg = percent_encode.run(
+                        ' '.join(args[first_index:second_index]),
+                    )
+                else:
+                    arg = percent_encode.run(
+                        ' '.join(args[first_index:]),
+                    )
+            else:
+                arg = percent_encode.run(args[first_index])
             for m in all_modifiers[1:].split('|'):
                 m = modifier_mapping.get(m)
                 if m == None:
@@ -85,10 +102,12 @@ class Command(object):
 
 
     def getArgumentCount(self):
-        args = [
-            int(match.group(1))
-            for match in arg_regex.finditer(self.url_pattern)
-        ]
+        args = []
+        for match in arg_regex.finditer(self.url_pattern):
+            first_index_str, _, second_index_str, _ = match.groups()
+            args.append(int(first_index_str))
+            if second_index_str != None:
+                args.append(int(second_index_str))
         if len(args) == 0:
             return 0
         return max(args)

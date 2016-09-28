@@ -111,6 +111,20 @@ builtin_command_groups = [
             url_pattern='https://www.wolframalpha.com/input/?i={0}',
             default_url='https://www.wolframalpha.com',
         ),
+        Command(
+            name='r',
+            description='Search all Reddit subreddits',
+            url_pattern='https://www.reddit.com/search?q={0}',
+            default_url='https://www.reddit.com',
+        ),
+        Command(
+            name='rr',
+            description=('Search a specific Reddit subreddit, '
+                         'subreddit name is the first argument to rr'),
+            url_pattern=('https://www.reddit.com/r/{1}/search?q={2:}'
+                         '&restrict_sr=on'),
+            default_url='https://www.reddit.com',
+        ),
     ),
 
     CommandGroup(
