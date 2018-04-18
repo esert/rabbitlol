@@ -7,6 +7,7 @@ setup:
 	coverage \
 	flask \
 	mock \
+	nose2 \
 	nose-exclude \
 	nosegae \
 	oauth2 \
@@ -18,7 +19,7 @@ run: setup
 	dev_appserver.py .
 
 test:
-	nosetests --logging-level=ERROR --with-gae
+	. ./bin/activate && nosetests --logging-level=ERROR --with-gae
 
 unit-coverage:
 	make EXCLUDE=app/tests/e2e coverage

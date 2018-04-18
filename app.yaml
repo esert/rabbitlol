@@ -4,7 +4,7 @@ threadsafe: true
 
 libraries:
 - name: ssl
-  version: latest
+  version: 2.7.11
 
 handlers:
 - url: /favicon.ico
